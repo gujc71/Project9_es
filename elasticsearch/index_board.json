@@ -1,0 +1,102 @@
+{
+  "settings": {
+	"number_of_shards" : 1,
+	"number_of_replicas": 0,  
+    "index": {
+      "analysis": {
+        "tokenizer": {
+          "nori_user_dict": {
+            "type": "nori_tokenizer",
+            "decompound_mode": "mixed",
+            "user_dictionary": "userdict.txt"
+          }
+        },
+        "analyzer": {
+          "nori_analyzer": {
+            "type": "custom",
+            "tokenizer": "nori_user_dict",
+            "char_filter": ["html_strip"],            
+            "filter": [
+              "nori_posfilter", "stop_filtering", "lowercase", "stemmer", "nori_readingform", "synonym_filter"
+            ]
+          }
+        },
+        "filter":{
+          "nori_posfilter":{
+            "type": "nori_part_of_speech",
+            "stoptags": ["E", "IC", "J", "MAG", "MAJ", "MM", "NA", "NR", "SC", "SE", "SF", "SH", "SN", "SP", "SSC", "SSO","SY","UNA","UNKNOWN","VA",
+                         "VCN","VCP","VSV","VV","VX","XPN","XR","XSA","XSN","XSV"
+            ]
+          },
+		  "stop_filtering":{
+            "type":"stop",
+            "stopwords_path":"stopwords.txt"
+          },					  
+          "synonym_filter":{
+            "type":"synonym",
+            "synonyms_path":"synonyms.txt"
+          },
+          "stemmer": {
+              "type": "stemmer",
+              "name": "porter2"
+          }
+        }
+      }
+    }
+  },
+    "mappings": {
+      "properties": {
+          "bgno": {
+            "type": "long"
+          },
+          "brdno": {
+            "type": "keyword"
+          },
+          "brddate": {
+            "type": "date",
+            "fields": {"keyword": {"type": "keyword"} }
+          },
+          "brdtime": {
+            "type": "text",
+            "fields": {"keyword": {"type": "keyword"} }
+          },
+          "userno": {
+            "type": "long",
+            "fields": {"keyword": {"type": "keyword"} }
+          },          
+          "brdwriter": {
+            "type": "text",
+            "fields": {"keyword": {"type": "keyword"} }
+          },
+          "brdtitle": {
+            "type": "text",
+            "analyzer":"nori_analyzer"
+          },
+          "brdmemo": {
+            "type": "text",
+            "analyzer":"nori_analyzer",
+            "fields": {
+                "keyword": {"type": "keyword", "index": false, "store": true, "ignore_above": 300}
+            }
+          },
+          "brdreply": {
+            "type": "nested",
+            "properties": {
+              "reno": {"type": "text"} ,
+              "redate": {"type": "text"} ,
+              "rememo": {"type": "text", "analyzer":"nori_analyzer"} ,
+              "usernm": {"type": "text"} ,
+              "userno": {"type": "text"} 
+           }
+          },
+          "brdfiles": {
+            "type": "nested",
+            "properties": {
+              "fileno": {"type": "text"} ,
+              "filememo": {"type": "text", "analyzer":"nori_analyzer"}
+            }           
+          }
+        }
+      }
+}
+
