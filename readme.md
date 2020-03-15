@@ -6,6 +6,9 @@ Spring 4 + MyBatis 3 + MariaDB (Maven) 기반으로  제작한 웹 프로젝트 
 좀더 자세한 설명은 [여기](https://forest71.tistory.com/207)에서 확인할 수 있다.
 
 
+![Screenshot](./screenshot.png)
+
+
 ### 주요 구현 기능 ###
 - 게시판 데이터 수집: 게시글, 댓글, 첨부 파일(Tika)
 - 웹 프로젝트에서 통합 검색
